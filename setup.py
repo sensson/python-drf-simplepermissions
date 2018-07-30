@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='drf_simplepermissions',
+setup(name='drf-simplepermissions',
       version='0.0.1',
       description='SimplePermissions checks against a list of permissions',
       url='https://git.sensson.net/bellmann/python-drf-simplepermissions',
