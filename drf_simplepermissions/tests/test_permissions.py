@@ -6,7 +6,6 @@ from django.contrib.contenttypes.models import ContentType
 from drf_simplepermissions import SimplePermissions
 from drf_simplepermissions import is_demo
 from drf_simplepermissions.exceptions import SimpleModeException
-from drf_simplepermissions.exceptions import SimpleUserException
 
 
 class View:
@@ -75,13 +74,13 @@ class TestIsDemo(TestCase):
         self.user = User.objects.create_user('foo', password='bar')
 
     def test_demo_default(self):
-        self.assertEqual(is_demo(user=self.user), False) # noqa
+        self.assertEqual(is_demo(user=self.user), False)
 
     def test_demo_mode_true(self):
-        self.assertEqual(is_demo(user=self.user, demo_mode=True), True) # noqa
+        self.assertEqual(is_demo(user=self.user, demo_mode=True), True)
 
     def test_demo_mode_false(self):
-        self.assertEqual(is_demo(user=self.user, demo_mode=False), False) # noqa
+        self.assertEqual(is_demo(user=self.user, demo_mode=False), False)
 
     def test_demo_group_default_name(self):
         group = Group.objects.create(name='demo')
@@ -91,12 +90,12 @@ class TestIsDemo(TestCase):
     def test_demo_group_custom_name(self):
         group = Group.objects.create(name='foobar')
         group.user_set.add(self.user)
-        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), True) # noqa
+        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), True)
 
     def test_demo_group_custom_name_with_default_group(self):
         group = Group.objects.create(name='demo')
         group.user_set.add(self.user)
-        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), False) # noqa
+        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), False)
 
     def test_demo_multiple_groups_true(self):
         groups = ['group1', 'group2']
@@ -104,7 +103,7 @@ class TestIsDemo(TestCase):
             group = Group.objects.create(name=group_name)
             group.user_set.add(self.user)
 
-        self.assertEqual(is_demo(user=self.user, demo_group=groups), True) # noqa
+        self.assertEqual(is_demo(user=self.user, demo_group=groups), True)
 
     def test_demo_group_unsupported_object(self):
         unsupported_group = type('demo_group', (), {})()
@@ -114,4 +113,4 @@ class TestIsDemo(TestCase):
         self.assertRaises(SimpleModeException, is_demo, user=self.user, demo_mode='foo') # noqa
 
     def test_demo_unsupported_user_object(self):
-        self.assertRaises(SimpleUserException, is_demo, user=True)
+        self.assertEqual(is_demo(user=False), False)
