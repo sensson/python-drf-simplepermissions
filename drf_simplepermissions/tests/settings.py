@@ -30,5 +30,7 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--nocapture',
     '--with-coverage',
-    '--cover-package=drf_simplepermissions'
+    '--cover-html',
+    '--cover-html-dir=htmlcov',
+    '--cover-package=drf_simplepermissions',
 ]
