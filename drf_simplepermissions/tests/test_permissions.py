@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from drf_simplepermissions import SimplePermissions
@@ -64,3 +65,40 @@ class TestPermissions(TestCase):
         self.request.user.user_permissions.add(permission)
         self.view.allowed_permissions = 'test'
         self.assertEqual(self.permissions.has_permission(request=self.request, view=self.view), False) # noqa
+
+
+class TestIsDemo(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('foo', password='bar')
+
+    def test_demo_default(self):
+        self.assertEqual(SimplePermissions.is_demo(user=self.user), False) # noqa
+
+    def test_demo_mode_true(self):
+        self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_mode=True), True) # noqa
+
+    def test_demo_mode_false(self):
+        self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_mode=False), False) # noqa
+
+    def test_demo_group_default_name(self):
+        group = Group.objects.create(name='demo')
+        group.user_set.add(self.user)
+        self.assertEqual(SimplePermissions.is_demo(user=self.user), True)
+
+    def test_demo_group_custom_name(self):
+        group = Group.objects.create(name='foobar')
+        group.user_set.add(self.user)
+        self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_group='foobar'), True) # noqa
+
+    def test_demo_group_custom_name_with_default_group(self):
+        group = Group.objects.create(name='demo')
+        group.user_set.add(self.user)
+        self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_group='foobar'), False) # noqa
+
+    def test_demo_multiple_groups_true(self):
+        groups = ['group1', 'group2']
+        for group_name in groups:
+            group = Group.objects.create(name=group_name)
+            group.user_set.add(self.user)
+
+        self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_group=groups), True) # noqa

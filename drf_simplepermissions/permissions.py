@@ -18,3 +18,29 @@ class SimplePermissions(permissions.BasePermission):
                 return True
 
         return False
+
+    @staticmethod
+    def is_demo(user, demo_group='demo', demo_mode=None):
+        '''is_demo checks if a user is added to a demo group or groups. If a
+        list of groups is supplied, it will try to match against any group and
+        if a match is found, it will return true.
+
+        This allows you to setup demo accounts that are restricted in what they
+        can do or what they can see. Keep in mind that it is not intended to
+        be used as a permission_classes' class.'''
+
+        try:
+            basestring
+        except NameError:
+            basestring = str
+
+        if demo_mode is not None:
+            return demo_mode
+
+        if isinstance(demo_group, basestring):
+            return user.groups.filter(name=demo_group).exists()
+
+        if isinstance(demo_group, (list)):
+            return user.groups.filter(name__in=demo_group).exists()
+
+        return False
