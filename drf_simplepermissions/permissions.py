@@ -20,36 +20,36 @@ class SimplePermissions(permissions.BasePermission):
 
         return False
 
-    @staticmethod
-    def is_demo(user, demo_group='demo', demo_mode=None):
-        '''is_demo checks if a user is added to a demo group or groups. If a
-        list of groups is supplied, it will try to match against any group and
-        if a match is found, it will return true.
 
-        This allows you to setup demo accounts that are restricted in what they
-        can do or what they can see. Keep in mind that it is not intended to
-        be used as a permission_classes' class.'''
+def is_demo(user, demo_group='demo', demo_mode=None):
+    '''is_demo checks if a user is added to a demo group or groups. If a
+    list of groups is supplied, it will try to match against any group and
+    if a match is found, it will return true.
 
-        try:
-            basestring
-        except NameError:
-            basestring = str
+    This allows you to setup demo accounts that are restricted in what they
+    can do or what they can see. Keep in mind that it is not intended to
+    be used as a permission_classes' class.'''
 
-        if not isinstance(user, User):
-            raise Exception('user is not a valid User object')
+    try:
+        basestring
+    except NameError:
+        basestring = str
 
-        if demo_mode is not None:
-            if isinstance(demo_mode, bool):
-                return demo_mode
-            else:
-                raise Exception('demo_mode {0} is unsupported'.format(
-                    demo_mode,
-                ))
+    if not isinstance(user, User):
+        raise Exception('user is not a valid User object')
 
-        if isinstance(demo_group, basestring):
-            return user.groups.filter(name=demo_group).exists()
+    if demo_mode is not None:
+        if isinstance(demo_mode, bool):
+            return demo_mode
+        else:
+            raise Exception('demo_mode {0} is unsupported'.format(
+                demo_mode,
+            ))
 
-        if isinstance(demo_group, (list)):
-            return user.groups.filter(name__in=demo_group).exists()
+    if isinstance(demo_group, basestring):
+        return user.groups.filter(name=demo_group).exists()
 
-        return False
+    if isinstance(demo_group, (list)):
+        return user.groups.filter(name__in=demo_group).exists()
+
+    return False
