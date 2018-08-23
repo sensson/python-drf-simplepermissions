@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import permissions
 
 
@@ -33,6 +34,9 @@ class SimplePermissions(permissions.BasePermission):
             basestring
         except NameError:
             basestring = str
+
+        if not isinstance(user, User):
+            raise Exception('user is not a valid User object')
 
         if demo_mode is not None:
             if isinstance(demo_mode, bool):

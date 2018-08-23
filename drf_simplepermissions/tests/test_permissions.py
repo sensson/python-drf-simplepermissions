@@ -108,4 +108,7 @@ class TestIsDemo(TestCase):
         self.assertEqual(SimplePermissions.is_demo(user=self.user, demo_group=unsupported_group), False) # noqa
 
     def test_demo_group_unsupported_demo_mode(self):
-        self.assertRaises(Exception, SimplePermissions.is_demo, demo_group='foo') # noqa
+        self.assertRaises(Exception, SimplePermissions.is_demo, demo_group=True) # noqa
+
+    def test_demo_unsupported_user_object(self):
+        self.assertRaises(Exception, SimplePermissions.is_demo, user=True)
