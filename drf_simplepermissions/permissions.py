@@ -39,12 +39,12 @@ def is_demo(user, demo_group='demo', demo_mode=None):
         raise Exception('user is not a valid User object')
 
     if demo_mode is not None:
-        if isinstance(demo_mode, bool):
-            return demo_mode
-        else:
+        if not isinstance(demo_mode, bool):
             raise Exception('demo_mode {0} is unsupported'.format(
                 demo_mode,
             ))
+
+        return demo_mode
 
     if isinstance(demo_group, basestring):
         return user.groups.filter(name=demo_group).exists()
