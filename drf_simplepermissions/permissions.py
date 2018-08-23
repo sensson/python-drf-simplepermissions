@@ -35,7 +35,12 @@ class SimplePermissions(permissions.BasePermission):
             basestring = str
 
         if demo_mode is not None:
-            return demo_mode
+            if isinstance(demo_mode, bool):
+                return demo_mode
+            else:
+                raise Exception('demo_mode {0} is unsupported'.format(
+                    demo_mode,
+                ))
 
         if isinstance(demo_group, basestring):
             return user.groups.filter(name=demo_group).exists()
