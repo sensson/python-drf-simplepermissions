@@ -5,6 +5,8 @@ from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from drf_simplepermissions import SimplePermissions
 from drf_simplepermissions import is_demo
+from drf_simplepermissions.exceptions import SimpleModeException
+from drf_simplepermissions.exceptions import SimpleUserException
 
 
 class View:
@@ -109,7 +111,7 @@ class TestIsDemo(TestCase):
         self.assertEqual(is_demo(user=self.user, demo_group=unsupported_group), False) # noqa
 
     def test_demo_group_unsupported_demo_mode(self):
-        self.assertRaises(Exception, is_demo, demo_group=True) # noqa
+        self.assertRaises(SimpleModeException, is_demo, user=self.user, demo_mode='foo') # noqa
 
     def test_demo_unsupported_user_object(self):
-        self.assertRaises(Exception, is_demo, user=True)
+        self.assertRaises(SimpleUserException, is_demo, user=True)

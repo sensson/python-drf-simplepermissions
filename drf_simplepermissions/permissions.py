@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import permissions
+from drf_simplepermissions.exceptions import SimpleModeException
+from drf_simplepermissions.exceptions import SimpleUserException
 
 
 class SimplePermissions(permissions.BasePermission):
@@ -36,11 +38,11 @@ def is_demo(user, demo_group='demo', demo_mode=None):
         basestring = str
 
     if not isinstance(user, User):
-        raise Exception('user is not a valid User object')
+        raise SimpleUserException('user is not a valid User object')
 
     if demo_mode is not None:
         if not isinstance(demo_mode, bool):
-            raise Exception('demo_mode {0} is unsupported'.format(
+            raise SimpleModeException('demo_mode {0} is unsupported'.format(
                 demo_mode,
             ))
 
