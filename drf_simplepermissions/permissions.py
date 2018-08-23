@@ -23,7 +23,7 @@ class SimplePermissions(permissions.BasePermission):
         return False
 
 
-def is_demo(user, demo_group='demo', demo_mode=None):
+def is_demo(user, demo_group='demo', demo_mode=False):
     '''is_demo checks if a user is added to a demo group or groups. If a
     list of groups is supplied, it will try to match against any group and
     if a match is found, it will return true.
@@ -40,7 +40,7 @@ def is_demo(user, demo_group='demo', demo_mode=None):
     if not isinstance(user, User):
         raise SimpleUserException('user is not a valid User object')
 
-    if demo_mode is not None:
+    if demo_mode is not False:
         if not isinstance(demo_mode, bool):
             raise SimpleModeException('demo_mode {0} is unsupported'.format(
                 demo_mode,
