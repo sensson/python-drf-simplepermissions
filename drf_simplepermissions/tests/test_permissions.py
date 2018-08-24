@@ -90,23 +90,26 @@ class TestIsDemo(TestCase):
         group.user_set.add(self.user)
         self.assertEqual(is_demo(user=self.user), True)
 
+    @override_settings(DEMO_GROUPS='foobar')
     def test_demo_group_custom_name(self):
         group = Group.objects.create(name='foobar')
         group.user_set.add(self.user)
-        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), True)
+        self.assertEqual(is_demo(user=self.user), True)
 
+    @override_settings(DEMO_GROUPS='foobar')
     def test_demo_group_custom_name_with_default_group(self):
         group = Group.objects.create(name='demo')
         group.user_set.add(self.user)
-        self.assertEqual(is_demo(user=self.user, demo_group='foobar'), False)
+        self.assertEqual(is_demo(user=self.user), False)
 
+    @override_settings(DEMO_GROUPS=['group1', 'group2'])
     def test_demo_multiple_groups_true(self):
         groups = ['group1', 'group2']
         for group_name in groups:
             group = Group.objects.create(name=group_name)
             group.user_set.add(self.user)
 
-        self.assertEqual(is_demo(user=self.user, demo_group=groups), True)
+        self.assertEqual(is_demo(user=self.user), True)
 
     @override_settings(DEMO=False)
     def test_demo_mode_for_global_false_but_user_in_demo_group(self):
@@ -114,9 +117,9 @@ class TestIsDemo(TestCase):
         group.user_set.add(self.user)
         self.assertEqual(is_demo(user=self.user), True)
 
+    @override_settings(DEMO_GROUPS=type('demo_group', (), {})())
     def test_demo_group_unsupported_object(self):
-        unsupported_group = type('demo_group', (), {})()
-        self.assertEqual(is_demo(user=self.user, demo_group=unsupported_group), False) # noqa
+        self.assertEqual(is_demo(user=self.user), False) # noqa
 
     @override_settings(DEMO='foo')
     def test_demo_group_unsupported_demo_mode(self):
