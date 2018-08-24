@@ -28,10 +28,10 @@ from drf_simplepermissions import is_demo
 
 if is_demo(User, demo_group='demo'):
   # We should run in demo mode when the user is in 'demo'
-
-if is_demo(User, demo_mode=True):
-  # We should run in demo mode as it's set globally
 ```
+
+You can override enable demo mode globally by adding `DEMO = True` to your
+application's `settings.py`.
 
 # Installation
 

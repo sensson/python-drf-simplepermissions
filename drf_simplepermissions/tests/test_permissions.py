@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.test import override_settings
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
@@ -76,11 +77,13 @@ class TestIsDemo(TestCase):
     def test_demo_default(self):
         self.assertEqual(is_demo(user=self.user), False)
 
+    @override_settings(DEMO=True)
     def test_demo_mode_true(self):
-        self.assertEqual(is_demo(user=self.user, demo_mode=True), True)
+        self.assertEqual(is_demo(user=self.user), True)
 
+    @override_settings(DEMO=False)
     def test_demo_mode_false(self):
-        self.assertEqual(is_demo(user=self.user, demo_mode=False), False)
+        self.assertEqual(is_demo(user=self.user), False)
 
     def test_demo_group_default_name(self):
         group = Group.objects.create(name='demo')
@@ -105,12 +108,19 @@ class TestIsDemo(TestCase):
 
         self.assertEqual(is_demo(user=self.user, demo_group=groups), True)
 
+    @override_settings(DEMO=False)
+    def test_demo_mode_for_global_false_but_user_in_demo_group(self):
+        group = Group.objects.create(name='demo')
+        group.user_set.add(self.user)
+        self.assertEqual(is_demo(user=self.user), True)
+
     def test_demo_group_unsupported_object(self):
         unsupported_group = type('demo_group', (), {})()
         self.assertEqual(is_demo(user=self.user, demo_group=unsupported_group), False) # noqa
 
+    @override_settings(DEMO='foo')
     def test_demo_group_unsupported_demo_mode(self):
-        self.assertRaises(SimpleModeException, is_demo, user=self.user, demo_mode='foo') # noqa
+        self.assertRaises(SimpleModeException, is_demo, user=self.user)
 
     def test_demo_unsupported_user_object(self):
         self.assertEqual(is_demo(user=False), False)
