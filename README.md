@@ -26,12 +26,29 @@ views or other methods should be running in demo mode.
 ```python
 from drf_simplepermissions import is_demo
 
-if is_demo(User, demo_group='demo'):
+if is_demo(User):
   # We should run in demo mode when the user is in 'demo'
-
-if is_demo(User, demo_mode=True):
-  # We should run in demo mode as it's set globally
 ```
+
+# Settings
+
+Settings can be managed in `settings.py`.
+
+## DEMO
+
+Global demo mode can be enabled by changing `settings.DEMO` to True. If
+it's set to False you can override it by adding users to a group. You
+can't override `settings.DEMO` when it's set to True. When global demo
+mode is set to true, all users no matter their group membership will be
+considered demo users.
+
+## DEMO_GROUPS
+
+`settings.DEMO_GROUPS` contains a string or a list of groups that should be
+considered demo users. It will try to match against any group and if a match
+is found, it will return true. It is set to 'demo' by default. Groups are
+not managed by this module and should be added manually or with a custom
+migration.
 
 # Installation
 
