@@ -11,4 +11,5 @@ setup(name='drf-simplepermissions',
           'django',
           'djangorestframework',
       ],
+      python_requires='>=3.4',
       zip_safe=False)
