@@ -1,3 +1,4 @@
+import os
 from .permissions import is_demo
 from .permissions import SimplePermissions
 
