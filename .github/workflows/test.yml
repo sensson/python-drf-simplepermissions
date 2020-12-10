@@ -1,4 +1,4 @@
-name: drf-simplepermissions
+name: test
 
 on:
   push:

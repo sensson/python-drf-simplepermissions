@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='drf-simplepermissions',
-      version='0.0.4',
+      version=os.environ.get('PACKAGE_VERSION', '0.0.0'),
       description='SimplePermissions checks against a list of permissions',
       url='https://github.com/bellmann/python-drf-simplepermissions',
       author='Bellmann BV',
